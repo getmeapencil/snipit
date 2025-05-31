@@ -1,5 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import "@mantine/core/styles.css";
+import "@mantine/tiptap/styles.css";
 import { MantineProvider } from "@mantine/core";
 import { AppRouter } from "./router";
 
