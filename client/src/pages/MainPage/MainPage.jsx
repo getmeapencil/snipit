@@ -9,6 +9,7 @@ import {
   Image,
   Text,
   Flex,
+  Button,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
@@ -28,12 +29,22 @@ export const MainPage = () => {
     <AppShell
       h="100vh"
       header={{ height: 60 }}
+      navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }}
       aside={{
-        width: 400,
+        width: 300,
         breakpoint: "sm",
         collapsed: { mobile: !opened },
       }}
     >
+      <AppShell.Navbar p="md">
+        <Stack gap="md">
+          <Button variant="outline">Create New Snippet</Button>
+          <Text>SnipIt</Text>
+          <Text>SnipIt</Text>
+          <Text>SnipIt</Text>
+          <Text>SnipIt</Text>
+        </Stack>
+      </AppShell.Navbar>
       <AppShell.Header>
         <Flex
           align="center"
@@ -107,6 +118,8 @@ export const MainPage = () => {
               onChange={(event) => setPassword(event.currentTarget.value)}
             />
           )}
+          <Button>Save</Button>
+          <Button variant="outline">Copy Link</Button>
         </Stack>
       </AppShell.Aside>
     </AppShell>
