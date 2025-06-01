@@ -1,10 +1,16 @@
-import { Loader } from "@/components/Loader/Loader";
-import styles from "./LoadingPage.module.css";
+import { Loader } from "@mantine/core";
 
 export const LoadingPage = () => {
   return (
-    <div className={styles.container}>
-      <Loader />
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <Loader size="xl" type="dots" />
     </div>
   );
 };
