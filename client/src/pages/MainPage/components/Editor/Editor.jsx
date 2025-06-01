@@ -21,8 +21,21 @@ export const Editor = () => {
   });
 
   return (
-    <RichTextEditor editor={editor}>
-      <RichTextEditor.Toolbar sticky stickyOffset="var(--header-height)">
+    <RichTextEditor
+      editor={editor}
+      styles={{
+        content: {
+          minHeight: "70vh",
+        },
+      }}
+    >
+      <RichTextEditor.Toolbar
+        sticky
+        stickyOffset={0}
+        style={{
+          zIndex: 10,
+        }}
+      >
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
           <RichTextEditor.Italic />
@@ -57,6 +70,7 @@ export const Editor = () => {
           <RichTextEditor.Redo />
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
+
       <RichTextEditor.Content />
     </RichTextEditor>
   );

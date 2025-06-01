@@ -4,37 +4,74 @@ import {
   Select,
   TextInput,
   Radio,
-  Group,
   Stack,
   PasswordInput,
+  Image,
+  Text,
+  Flex,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { Editor } from "./components/Editor/Editor";
+import { ScrollArea } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 export const MainPage = () => {
+  const navigate = useNavigate();
   const [opened, { toggle }] = useDisclosure();
-  const [flavor, setFlavor] = useState("");
-  const [name, setName] = useState("");
+  const [flavor, setFlavor] = useState("Rich Text");
+  const [name, setName] = useState("Snippet-1");
   const [exposure, setExposure] = useState("public");
   const [password, setPassword] = useState("");
 
   return (
     <AppShell
+      h="100vh"
       header={{ height: 60 }}
       aside={{
         width: 400,
         breakpoint: "sm",
         collapsed: { mobile: !opened },
       }}
-      padding="md"
     >
       <AppShell.Header>
-        <div>Logo</div>
+        <Flex
+          align="center"
+          justify="space-between"
+          gap={8}
+          pl="md"
+          pr="md"
+          h="100%"
+        >
+          <Flex
+            align="center"
+            gap={8}
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/")}
+          >
+            <Image src="/logo-transparent.png" alt="logo" w={40} h={40} />
+            <Text size="1.5rem" fw={400}>
+              SnipIt
+            </Text>
+          </Flex>
+        </Flex>
         <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
       </AppShell.Header>
       <AppShell.Main>
-        <Editor />
+        <ScrollArea.Autosize mah="calc(100vh - var(--header-height))">
+          <div style={{ padding: "1rem" }}>
+            <div
+              style={{
+                fontSize: "1.25rem",
+                textAlign: "center",
+                marginBottom: "1rem",
+              }}
+            >
+              {name}
+            </div>
+            <Editor />
+          </div>
+        </ScrollArea.Autosize>
       </AppShell.Main>
       <AppShell.Aside p="md">
         <Stack gap="md">

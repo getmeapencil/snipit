@@ -37,7 +37,7 @@ const CodeBlockComponent = ({ node, updateAttributes }) => {
             position: "absolute",
             top: "4px",
             right: "4px",
-            zIndex: 10,
+            zIndex: 5,
           }}
         >
           <Select
