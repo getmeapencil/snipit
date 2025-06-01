@@ -18,7 +18,7 @@ import { useState } from "react";
 import { Editor } from "./components/Editor/Editor";
 import { ScrollArea } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { FiLogOut, FiUser } from "react-icons/fi";
+import { FiLogOut, FiUser, FiSearch } from "react-icons/fi";
 
 export const MainPage = () => {
   const navigate = useNavigate();
@@ -100,10 +100,53 @@ export const MainPage = () => {
       <AppShell.Navbar p="md">
         <Stack gap="md">
           <Button variant="outline">Create New Snippet</Button>
-          <Text>SnipIt</Text>
-          <Text>SnipIt</Text>
-          <Text>SnipIt</Text>
-          <Text>SnipIt</Text>
+          <Flex direction="column" gap={8}>
+            <Text size="xs" fw={500} c="gray.6">
+              Your Snippets
+            </Text>
+            <TextInput
+              rightSectionPointerEvents="none"
+              rightSection={<FiSearch />}
+              placeholder="Search"
+            />
+            <ScrollArea.Autosize mah="400px">
+              <Flex direction="column" gap={4} pr="1rem">
+                {Array.from({ length: 20 }).map((_, index) => (
+                  <Button
+                    justify="space-between"
+                    fullWidth
+                    variant="subtle"
+                    color="black"
+                    key={index}
+                    fw={400}
+                  >
+                    Untitled {index + 1}
+                  </Button>
+                ))}
+              </Flex>
+            </ScrollArea.Autosize>
+          </Flex>
+          <Flex direction="column" gap={8}>
+            <Text size="xs" fw={500} c="gray.6">
+              Public Snippets
+            </Text>
+            <ScrollArea.Autosize mah="300px">
+              <Flex direction="column" gap={4} pr="1rem">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Button
+                    justify="space-between"
+                    fullWidth
+                    variant="subtle"
+                    color="black"
+                    key={index}
+                    fw={400}
+                  >
+                    Untitled {index + 1}
+                  </Button>
+                ))}
+              </Flex>
+            </ScrollArea.Autosize>
+          </Flex>
         </Stack>
       </AppShell.Navbar>
       <AppShell.Main>
