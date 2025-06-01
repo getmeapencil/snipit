@@ -8,5 +8,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  --primary-color: var(--mantine-color-blue-5);
   --header-height: 60px;
 }
