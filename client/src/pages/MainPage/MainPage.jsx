@@ -10,16 +10,20 @@ import {
   Text,
   Flex,
   Button,
+  Avatar,
+  Menu,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { Editor } from "./components/Editor/Editor";
 import { ScrollArea } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { FiLogOut, FiUser } from "react-icons/fi";
 
 export const MainPage = () => {
   const navigate = useNavigate();
-  const [opened, { toggle }] = useDisclosure();
+  const [navbarOpened, { toggle: toggleNavbar }] = useDisclosure();
+  const [asideOpened, { toggle: toggleAside }] = useDisclosure();
   const [flavor, setFlavor] = useState("Rich Text");
   const [name, setName] = useState("Snippet-1");
   const [exposure, setExposure] = useState("public");
@@ -29,22 +33,17 @@ export const MainPage = () => {
     <AppShell
       h="100vh"
       header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }}
+      navbar={{
+        width: { base: 300 },
+        breakpoint: "lg",
+        collapsed: { mobile: !navbarOpened },
+      }}
       aside={{
-        width: 300,
-        breakpoint: "sm",
-        collapsed: { mobile: !opened },
+        width: { base: 300 },
+        breakpoint: "lg",
+        collapsed: { mobile: !asideOpened },
       }}
     >
-      <AppShell.Navbar p="md">
-        <Stack gap="md">
-          <Button variant="outline">Create New Snippet</Button>
-          <Text>SnipIt</Text>
-          <Text>SnipIt</Text>
-          <Text>SnipIt</Text>
-          <Text>SnipIt</Text>
-        </Stack>
-      </AppShell.Navbar>
       <AppShell.Header>
         <Flex
           align="center"
@@ -54,20 +53,59 @@ export const MainPage = () => {
           pr="md"
           h="100%"
         >
-          <Flex
-            align="center"
-            gap={8}
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/")}
-          >
-            <Image src="/logo-transparent.png" alt="logo" w={40} h={40} />
-            <Text size="1.5rem" fw={400}>
-              SnipIt
-            </Text>
+          <Flex align="center" gap={8}>
+            <Burger
+              opened={navbarOpened}
+              onClick={toggleNavbar}
+              hiddenFrom="lg"
+              size="sm"
+            />
+            <Flex
+              align="center"
+              gap={8}
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/")}
+            >
+              <Image src="/logo-transparent.png" alt="logo" w={40} h={40} />
+              <Text size="1.5rem" fw={400}>
+                SnipIt
+              </Text>
+            </Flex>
+          </Flex>
+          <Flex align="center" gap={8}>
+            <Menu>
+              <Menu.Target>
+                <Avatar radius="sm" color="blue" />
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Flex align="center" gap={8} p="xs">
+                  <FiUser />
+                  <Text size="sm">example@example.com</Text>
+                </Flex>
+                <Menu.Divider />
+                <Menu.Item color="red" leftSection={<FiLogOut />}>
+                  Logout
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+            <Burger
+              opened={asideOpened}
+              onClick={toggleAside}
+              hiddenFrom="lg"
+              size="sm"
+            />
           </Flex>
         </Flex>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
       </AppShell.Header>
+      <AppShell.Navbar p="md">
+        <Stack gap="md">
+          <Button variant="outline">Create New Snippet</Button>
+          <Text>SnipIt</Text>
+          <Text>SnipIt</Text>
+          <Text>SnipIt</Text>
+          <Text>SnipIt</Text>
+        </Stack>
+      </AppShell.Navbar>
       <AppShell.Main>
         <ScrollArea.Autosize mah="calc(100vh - var(--header-height))">
           <div style={{ padding: "1rem" }}>
