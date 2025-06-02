@@ -15,10 +15,13 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
-import { Editor } from "./components/Editor/Editor";
+import { PlainEditor } from "./components/PlainEditor/PlainEditor";
+import { CodeEditor } from "./components/CodeEditor/CodeEditor";
+import { RichTextEditor } from "./components/RichTextEditor/RichTextEditor";
 import { ScrollArea } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { FiLogOut, FiUser, FiSearch } from "react-icons/fi";
+import styles from "./MainPage.module.css";
 
 export const MainPage = () => {
   const navigate = useNavigate();
@@ -34,12 +37,12 @@ export const MainPage = () => {
       h="100vh"
       header={{ height: 60 }}
       navbar={{
-        width: { base: 300 },
+        width: { base: "var(--navbar-width)" },
         breakpoint: "lg",
         collapsed: { mobile: !navbarOpened },
       }}
       aside={{
-        width: { base: 300 },
+        width: { base: "var(--aside-width)" },
         breakpoint: "lg",
         collapsed: { mobile: !asideOpened },
       }}
@@ -151,7 +154,7 @@ export const MainPage = () => {
       </AppShell.Navbar>
       <AppShell.Main>
         <ScrollArea.Autosize mah="calc(100vh - var(--header-height))">
-          <div style={{ padding: "1rem" }}>
+          <div className={styles.mainSection}>
             <div
               style={{
                 fontSize: "1.25rem",
@@ -161,7 +164,9 @@ export const MainPage = () => {
             >
               {name}
             </div>
-            <Editor />
+            {flavor === "Plain" && <PlainEditor />}
+            {flavor === "Code" && <CodeEditor />}
+            {flavor === "Rich Text" && <RichTextEditor />}
           </div>
         </ScrollArea.Autosize>
       </AppShell.Main>

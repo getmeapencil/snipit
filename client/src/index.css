@@ -10,4 +10,6 @@
 
   --primary-color: var(--mantine-color-blue-5);
   --header-height: 60px;
+  --aside-width: 300px;
+  --navbar-width: 300px;
 }
