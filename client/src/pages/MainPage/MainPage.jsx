@@ -12,6 +12,7 @@ import {
   Button,
   Avatar,
   Menu,
+  ActionIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
@@ -20,7 +21,7 @@ import { CodeEditor } from "./components/CodeEditor/CodeEditor";
 import { RichTextEditor } from "./components/RichTextEditor/RichTextEditor";
 import { ScrollArea } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
-import { FiLogOut, FiUser, FiSearch } from "react-icons/fi";
+import { FiEdit, FiLogOut, FiMail, FiSearch, FiUser } from "react-icons/fi";
 import styles from "./MainPage.module.css";
 
 export const MainPage = () => {
@@ -29,6 +30,7 @@ export const MainPage = () => {
   const [asideOpened, { toggle: toggleAside }] = useDisclosure();
   const [flavor, setFlavor] = useState("Rich Text");
   const [name, setName] = useState("Snippet-1");
+  const [username, setUsername] = useState("John Doe");
   const [exposure, setExposure] = useState("public");
   const [password, setPassword] = useState("");
 
@@ -78,12 +80,31 @@ export const MainPage = () => {
           <Flex align="center" gap={8}>
             <Menu>
               <Menu.Target>
-                <Avatar radius="sm" color="blue" />
+                <Avatar
+                  radius="sm"
+                  color="blue"
+                  style={{ cursor: "pointer" }}
+                />
               </Menu.Target>
               <Menu.Dropdown>
-                <Flex align="center" gap={8} p="xs">
-                  <FiUser />
-                  <Text size="sm">example@example.com</Text>
+                <Flex direction="column" gap={4} p="xs">
+                  <Flex align="center" gap={8}>
+                    <FiUser />
+                    <Text size="sm">{username}</Text>
+                    <ActionIcon
+                      variant="subtle"
+                      size="xs"
+                      onClick={() => {
+                        setUsername(username);
+                      }}
+                    >
+                      <FiEdit />
+                    </ActionIcon>
+                  </Flex>
+                  <Flex align="center" gap={8}>
+                    <FiMail />
+                    <Text size="sm">example@example.com</Text>
+                  </Flex>
                 </Flex>
                 <Menu.Divider />
                 <Menu.Item color="red" leftSection={<FiLogOut />}>
@@ -155,14 +176,13 @@ export const MainPage = () => {
       <AppShell.Main>
         <ScrollArea.Autosize mah="calc(100vh - var(--header-height))">
           <div className={styles.mainSection}>
-            <div
-              style={{
-                fontSize: "1.25rem",
-                textAlign: "center",
-                marginBottom: "1rem",
-              }}
-            >
-              {name}
+            <div>
+              <Text ta="center" size="xl" fw={500}>
+                {name}
+              </Text>
+              <Text c="gray.6" fw={400} ta="center" size="xs" mb="1rem">
+                by {username}
+              </Text>
             </div>
             {flavor === "Plain" && <PlainEditor />}
             {flavor === "Code" && <CodeEditor />}
