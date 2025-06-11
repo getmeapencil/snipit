@@ -21,16 +21,18 @@ import { CodeEditor } from "./components/CodeEditor/CodeEditor";
 import { RichTextEditor } from "./components/RichTextEditor/RichTextEditor";
 import { ScrollArea } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store/auth.store";
 import { FiEdit, FiLogOut, FiMail, FiSearch, FiUser } from "react-icons/fi";
 import styles from "./MainPage.module.css";
 
 export const MainPage = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuthStore();
   const [navbarOpened, { toggle: toggleNavbar }] = useDisclosure();
   const [asideOpened, { toggle: toggleAside }] = useDisclosure();
   const [flavor, setFlavor] = useState("Rich Text");
   const [name, setName] = useState("Snippet-1");
-  const [username, setUsername] = useState("John Doe");
+  const [username, setUsername] = useState(user?.username);
   const [exposure, setExposure] = useState("public");
   const [password, setPassword] = useState("");
 
@@ -67,11 +69,11 @@ export const MainPage = () => {
             />
             <Flex
               align="center"
-              gap={8}
+              gap={6}
               style={{ cursor: "pointer" }}
               onClick={() => navigate("/")}
             >
-              <Image src="/logo-transparent.png" alt="logo" w={40} h={40} />
+              <Image src="/logo-transparent.png" alt="logo" w={30} h={30} />
               <Text size="1.5rem" fw={400}>
                 SnipIt
               </Text>
@@ -81,8 +83,10 @@ export const MainPage = () => {
             <Menu>
               <Menu.Target>
                 <Avatar
+                  variant="outline"
                   radius="sm"
                   color="blue"
+                  src={user?.profilePicture}
                   style={{ cursor: "pointer" }}
                 />
               </Menu.Target>
@@ -90,7 +94,7 @@ export const MainPage = () => {
                 <Flex direction="column" gap={4} p="xs">
                   <Flex align="center" gap={8}>
                     <FiUser />
-                    <Text size="sm">{username}</Text>
+                    <Text size="sm">{user?.username}</Text>
                     <ActionIcon
                       variant="subtle"
                       size="xs"
@@ -103,11 +107,15 @@ export const MainPage = () => {
                   </Flex>
                   <Flex align="center" gap={8}>
                     <FiMail />
-                    <Text size="sm">example@example.com</Text>
+                    <Text size="sm">{user?.email}</Text>
                   </Flex>
                 </Flex>
                 <Menu.Divider />
-                <Menu.Item color="red" leftSection={<FiLogOut />}>
+                <Menu.Item
+                  color="red"
+                  leftSection={<FiLogOut />}
+                  onClick={logout}
+                >
                   Logout
                 </Menu.Item>
               </Menu.Dropdown>
