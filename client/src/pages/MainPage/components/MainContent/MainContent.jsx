@@ -6,7 +6,7 @@ import styles from "./MainContent.module.css";
 
 export const MainContent = ({ name, username, flavor }) => {
   return (
-    <div className={styles.mainSection}>
+    <div className={styles.mainContent}>
       <div>
         <Text ta="center" size="xl" fw={500}>
           {name}
