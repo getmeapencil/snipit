@@ -3,10 +3,11 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { CustomCodeBlockLowlight } from "./CustomCodeBlockLowlight";
 import { lowlight } from "./lowlight";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSnippetStore } from "@/store/snippet.store";
 
 export const RichTextEditor = () => {
-  const [content, setContent] = useState("");
+  const { content, setContent } = useSnippetStore();
   const [isFocused, setIsFocused] = useState(false);
 
   const editor = useEditor({
@@ -15,7 +16,7 @@ export const RichTextEditor = () => {
       Link,
       CustomCodeBlockLowlight.configure({ lowlight }),
     ],
-    content,
+    content: content || "",
     onUpdate: ({ editor }) => {
       setContent(editor.getHTML());
     },
@@ -26,6 +27,13 @@ export const RichTextEditor = () => {
       setIsFocused(false);
     },
   });
+
+  // Update editor content when prop changes
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content || "");
+    }
+  }, [content, editor]);
 
   return (
     <TiptapRichTextEditor

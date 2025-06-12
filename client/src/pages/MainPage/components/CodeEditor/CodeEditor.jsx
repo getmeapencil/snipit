@@ -1,17 +1,17 @@
-import { useState, useRef } from "react";
-import { Select, Stack, Flex, Button } from "@mantine/core";
+import { useRef } from "react";
+import { Stack, Flex, Button, Select } from "@mantine/core";
 import MonacoEditor from "@monaco-editor/react";
+import { useSnippetStore } from "@/store/snippet.store";
 import * as monaco from "monaco-editor";
 
-export const CodeEditor = () => {
-  const editorRef = useRef(null);
-  const [content, setContent] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+const LANGUAGE_OPTIONS = monaco.languages.getLanguages().map((language) => ({
+  value: language.id,
+  label: language.aliases?.[0] || language.id,
+}));
 
-  const languageOptions = monaco.languages.getLanguages().map((language) => ({
-    value: language.id,
-    label: language.aliases?.[0] || language.id,
-  }));
+export const CodeEditor = () => {
+  const { content, setContent, language, setLanguage } = useSnippetStore();
+  const editorRef = useRef(null);
 
   const formatCode = () => {
     if (editorRef.current) {
@@ -21,30 +21,23 @@ export const CodeEditor = () => {
 
   return (
     <Stack gap="sm">
-      <Flex gap="sm">
+      <Flex gap="sm" justify="flex-end" align="end">
         <Select
-          placeholder="Select a language"
-          data={languageOptions}
-          value={selectedLanguage}
-          onChange={setSelectedLanguage}
+          placeholder="Select programming language"
+          data={LANGUAGE_OPTIONS}
+          value={language}
+          onChange={setLanguage}
           searchable
-          size="sm"
-          styles={{
-            label: {
-              fontSize: "14px",
-              fontWeight: 500,
-              marginBottom: "4px",
-            },
-          }}
         />
-        <Button variant="outline" onClick={formatCode}>
+
+        <Button variant="outline" onClick={formatCode} size="sm">
           Format
         </Button>
       </Flex>
       <MonacoEditor
         height="70vh"
         width="100%"
-        language={selectedLanguage}
+        language={language}
         value={content}
         onChange={(value) => setContent(value || "")}
         onMount={(editor) => {

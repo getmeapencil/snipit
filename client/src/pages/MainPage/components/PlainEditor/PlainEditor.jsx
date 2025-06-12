@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Textarea } from "@mantine/core";
+import { useSnippetStore } from "@/store/snippet.store";
 
 export const PlainEditor = () => {
-  const [content, setContent] = useState("");
+  const { content, setContent } = useSnippetStore();
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -11,6 +12,7 @@ export const PlainEditor = () => {
       onChange={(event) => setContent(event.currentTarget.value)}
       minRows={29}
       autosize
+      placeholder="Start typing your content here..."
       styles={{
         input: {
           fontSize: "16px",

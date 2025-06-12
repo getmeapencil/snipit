@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import "@mantine/core/styles.css";
 import "@mantine/tiptap/styles.css";
+import "@mantine/notifications/styles.css";
 import { MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import { AppRouter } from "./router";
 import { fetchCurrentUserService, refreshTokenService } from "./api/auth.api";
 import { useAuthStore } from "./store/auth.store";
@@ -62,6 +64,7 @@ function App() {
           fontFamily: "Inter",
         }}
       >
+        <Notifications position="top-right" />
         <AppRouter />
       </MantineProvider>
     </BrowserRouter>

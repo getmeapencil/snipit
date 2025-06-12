@@ -1,8 +1,9 @@
 import { AppShell } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useState } from "react";
+import { useEffect } from "react";
 import { ScrollArea } from "@mantine/core";
 import { useAuthStore } from "@/store/auth.store";
+import { useSnippetStore } from "@/store/snippet.store";
 import { Header } from "./components/Header/Header";
 import { Navbar } from "./components/Navbar/Navbar";
 import { Aside } from "./components/Aside/Aside";
@@ -10,13 +11,18 @@ import { MainContent } from "./components/MainContent/MainContent";
 
 export const MainPage = () => {
   const { user } = useAuthStore();
+  const { fetchUserSnippets, fetchPublicSnippets } = useSnippetStore();
+
   const [navbarOpened, { toggle: toggleNavbar }] = useDisclosure();
   const [asideOpened, { toggle: toggleAside }] = useDisclosure();
-  const [flavor, setFlavor] = useState("Rich Text");
-  const [name, setName] = useState("Snippet-1");
-  const [username, setUsername] = useState(user?.username);
-  const [exposure, setExposure] = useState("public");
-  const [password, setPassword] = useState("");
+
+  // Fetch initial data
+  useEffect(() => {
+    if (user) {
+      fetchUserSnippets();
+      fetchPublicSnippets();
+    }
+  }, [user, fetchUserSnippets, fetchPublicSnippets]);
 
   return (
     <AppShell
@@ -39,8 +45,6 @@ export const MainPage = () => {
           toggleNavbar={toggleNavbar}
           asideOpened={asideOpened}
           toggleAside={toggleAside}
-          username={username}
-          setUsername={setUsername}
         />
       </AppShell.Header>
       <AppShell.Navbar p="md">
@@ -48,20 +52,11 @@ export const MainPage = () => {
       </AppShell.Navbar>
       <AppShell.Main>
         <ScrollArea.Autosize mah="calc(100vh - var(--header-height))">
-          <MainContent name={name} username={username} flavor={flavor} />
+          <MainContent />
         </ScrollArea.Autosize>
       </AppShell.Main>
       <AppShell.Aside p="md">
-        <Aside
-          name={name}
-          setName={setName}
-          flavor={flavor}
-          setFlavor={setFlavor}
-          exposure={exposure}
-          setExposure={setExposure}
-          password={password}
-          setPassword={setPassword}
-        />
+        <Aside />
       </AppShell.Aside>
     </AppShell>
   );
