@@ -54,7 +54,7 @@ export const Navbar = () => {
             onChange={(event) => setSearchTerm(event.currentTarget.value)}
           />
 
-          {isLoading ? (
+          {isLoading && userSnippets.length === 0 ? (
             <Flex justify="center" py="md">
               <Loader size="sm" />
             </Flex>

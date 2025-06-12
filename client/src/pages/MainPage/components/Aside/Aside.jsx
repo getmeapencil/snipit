@@ -145,7 +145,6 @@ export const Aside = () => {
       <Button
         leftSection={isUpdating ? <FiEdit size={16} /> : <FiSave size={16} />}
         onClick={handleSaveSnippet}
-        loading={isLoading}
         disabled={isLoading}
       >
         {isUpdating ? "Update Snippet" : "Save Snippet"}
