@@ -5,6 +5,7 @@ import {
   refreshAccessToken,
   getCurrentAuthenticatedUser,
   handleLogout,
+  updateUsername,
 } from "./auth.controller.js";
 import { requireAuth } from "#src/middlewares/requireAuth.js";
 import globalConfig from "#src/config/index.js";
@@ -36,5 +37,8 @@ router.get("/me", requireAuth, getCurrentAuthenticatedUser);
 
 // Logout
 router.post("/logout", requireAuth, handleLogout);
+
+// Update username
+router.put("/update-username", requireAuth, updateUsername);
 
 export default router;

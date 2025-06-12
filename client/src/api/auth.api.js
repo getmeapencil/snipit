@@ -33,3 +33,14 @@ export const logoutUserService = async () => {
     });
   }
 };
+
+export const updateUsernameService = async (username) => {
+  try {
+    const response = await apiClient.put("/auth/update-username", { username });
+    return response.data;
+  } catch (error) {
+    return handleError(error, {
+      contextPrefix: "API Error (updateUsernameService)",
+    });
+  }
+};

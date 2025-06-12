@@ -89,3 +89,55 @@ export const handleLogout = (req, res) => {
     message: "Logged out. Refresh token cleared.",
   });
 };
+
+export const updateUsername = async (req, res) => {
+  try {
+    const { username } = req.body;
+    const userId = req.user._id;
+
+    if (
+      !username ||
+      typeof username !== "string" ||
+      username.trim().length === 0
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Username is required and cannot be empty",
+      });
+    }
+
+    const trimmedUsername = username.trim();
+
+    // Update the user's username
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { username: trimmedUsername },
+      { new: true },
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const { _id, email, profilePicture } = updatedUser;
+    res.status(200).json({
+      success: true,
+      message: "Username updated successfully",
+      user: {
+        id: _id,
+        username: trimmedUsername,
+        email,
+        profilePicture,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating username:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};

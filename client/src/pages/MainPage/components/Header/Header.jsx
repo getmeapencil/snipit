@@ -6,21 +6,69 @@ import {
   Avatar,
   Menu,
   ActionIcon,
+  TextInput,
+  Button,
+  Notification,
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
-import { FiEdit, FiLogOut, FiMail, FiUser } from "react-icons/fi";
+import { FiEdit, FiLogOut, FiMail, FiUser, FiCheck, FiX } from "react-icons/fi";
+import { useState } from "react";
+import { notifications } from "@mantine/notifications";
 
 export const Header = ({
   navbarOpened,
   toggleNavbar,
   asideOpened,
   toggleAside,
-  username,
-  setUsername,
 }) => {
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const { user, logout, updateUsername, isLoading } = useAuthStore();
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [newUsername, setNewUsername] = useState(user?.username || "");
+
+  const handleUsernameEdit = () => {
+    setNewUsername(user?.username || "");
+    setIsEditingUsername(true);
+  };
+
+  const handleUsernameCancel = () => {
+    setNewUsername(user?.username || "");
+    setIsEditingUsername(false);
+  };
+
+  const handleUsernameSubmit = async () => {
+    if (!newUsername.trim()) {
+      notifications.show({
+        title: "Error",
+        message: "Username cannot be empty",
+        color: "red",
+      });
+      return;
+    }
+
+    if (newUsername.trim() === user?.username) {
+      setIsEditingUsername(false);
+      return;
+    }
+
+    const result = await updateUsername(newUsername.trim());
+
+    if (result.success) {
+      notifications.show({
+        title: "Success",
+        message: result.message,
+        color: "green",
+      });
+      setIsEditingUsername(false);
+    } else {
+      notifications.show({
+        title: "Error",
+        message: result.message,
+        color: "red",
+      });
+    }
+  };
 
   return (
     <Flex
@@ -65,16 +113,52 @@ export const Header = ({
             <Flex direction="column" gap={4} p="xs">
               <Flex align="center" gap={8}>
                 <FiUser />
-                <Text size="sm">{user?.username}</Text>
-                <ActionIcon
-                  variant="subtle"
-                  size="xs"
-                  onClick={() => {
-                    setUsername(username);
-                  }}
-                >
-                  <FiEdit />
-                </ActionIcon>
+                {isEditingUsername ? (
+                  <TextInput
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    size="xs"
+                    style={{ flex: 1 }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleUsernameSubmit();
+                      } else if (e.key === "Escape") {
+                        handleUsernameCancel();
+                      }
+                    }}
+                  />
+                ) : (
+                  <Text size="sm">{user?.username}</Text>
+                )}
+                {isEditingUsername ? (
+                  <Flex gap={2}>
+                    <ActionIcon
+                      variant="subtle"
+                      size="xs"
+                      color="green"
+                      onClick={handleUsernameSubmit}
+                      loading={isLoading}
+                    >
+                      <FiCheck />
+                    </ActionIcon>
+                    <ActionIcon
+                      variant="subtle"
+                      size="xs"
+                      color="red"
+                      onClick={handleUsernameCancel}
+                    >
+                      <FiX />
+                    </ActionIcon>
+                  </Flex>
+                ) : (
+                  <ActionIcon
+                    variant="subtle"
+                    size="xs"
+                    onClick={handleUsernameEdit}
+                  >
+                    <FiEdit />
+                  </ActionIcon>
+                )}
               </Flex>
               <Flex align="center" gap={8}>
                 <FiMail />
