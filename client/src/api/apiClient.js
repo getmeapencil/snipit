@@ -16,23 +16,34 @@ apiClient.interceptors.request.use(
     }
     return config;
   },
+  (error) => Promise.reject(error),
+);
+
+// Refresh token on TOKEN_EXPIRED errors
+apiClient.interceptors.response.use(
+  (response) => response,
   async (error) => {
     if (
       error.response?.status === 401 &&
       error.response?.data?.code === "TOKEN_EXPIRED"
     ) {
+      console.log("🔍 [Token Expired] Refreshing token");
       try {
         const response = await apiClient.post("/auth/refresh-token");
         if (response.data.success) {
-          useAuthStore.getState().setToken(response.data.accessToken);
-          error.config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+          const newToken = response.data.accessToken;
+          useAuthStore.getState().setToken(newToken);
+
+          // Retry the original request with new token
+          error.config.headers.Authorization = `Bearer ${newToken}`;
+          return apiClient.request(error.config);
         }
-        return await apiClient.request(error.config);
-      } catch (error) {
+      } catch (refreshError) {
         useAuthStore.getState().logout();
-        return Promise.reject(error);
+        return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   },
 );
