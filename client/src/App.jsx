@@ -62,7 +62,7 @@ function App() {
           fontFamily: "Inter",
         }}
       >
-        <Notifications position="top-right" />
+        <Notifications />
         <AppRouter />
       </MantineProvider>
     </BrowserRouter>
