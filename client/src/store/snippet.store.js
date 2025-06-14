@@ -8,6 +8,7 @@ import {
   deleteSnippetService,
   getSnippetService,
 } from "@/api/snippet.api";
+import { uniqueNamesGenerator, colors, animals } from "unique-names-generator";
 
 export const useSnippetStore = create()(
   persist(
@@ -21,7 +22,12 @@ export const useSnippetStore = create()(
 
       // Form state
       flavor: "Plain",
-      name: `Snippet-${Date.now()}`,
+      name: `Snippet-${uniqueNamesGenerator({
+        dictionaries: [colors, animals],
+        separator: "-",
+        length: 2,
+        style: "capital",
+      })}`,
       exposure: "public",
       password: "",
       content: "",
@@ -39,7 +45,12 @@ export const useSnippetStore = create()(
         const { flavor, exposure, language } = get();
         set({
           flavor,
-          name: `Snippet-${Date.now()}`,
+          name: `Snippet-${uniqueNamesGenerator({
+            dictionaries: [colors, animals],
+            separator: "-",
+            length: 2,
+            style: "capital",
+          })}`,
           exposure,
           password: "",
           content: "",
