@@ -1,6 +1,7 @@
 import { TextInput, Stack, Text, Flex, Button, Loader } from "@mantine/core";
 import { ScrollArea } from "@mantine/core";
 import { FiSearch, FiPlus } from "react-icons/fi";
+import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
 import { useSnippetStore } from "@/store/snippet.store";
 import { useAuthStore } from "@/store/auth.store";
@@ -47,7 +48,7 @@ export const Navbar = () => {
       ) : (
         <Button
           variant="outline"
-          leftSection={<FiPlus size={16} />}
+          leftSection={<FaGoogle size={16} />}
           onClick={() => navigate("/auth")}
           fullWidth
         >
