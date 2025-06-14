@@ -84,6 +84,26 @@ export const Aside = ({ isViewOnly = false, isAuthor = false }) => {
     }
   };
 
+  const handleCopyContent = async () => {
+    if (!content.trim()) return;
+
+    try {
+      await navigator.clipboard.writeText(content.trim());
+
+      notifications.show({
+        title: "Copied!",
+        message: "Snippet content copied to clipboard",
+        color: "green",
+      });
+    } catch {
+      notifications.show({
+        title: "Error",
+        message: "Failed to copy content",
+        color: "red",
+      });
+    }
+  };
+
   const handleDeleteSnippet = async () => {
     if (!currentSnippet?.uniqueId) return;
 
@@ -221,6 +241,14 @@ export const Aside = ({ isViewOnly = false, isAuthor = false }) => {
               Edit Snippet
             </Button>
           )}
+
+          <Button
+            variant="outline"
+            leftSection={<FiCopy size={16} />}
+            onClick={handleCopyContent}
+          >
+            Copy Content
+          </Button>
 
           <Button
             variant="outline"
