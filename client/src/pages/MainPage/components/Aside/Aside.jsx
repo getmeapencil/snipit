@@ -9,7 +9,7 @@ import {
   Modal,
   Group,
 } from "@mantine/core";
-import { FiSave, FiCopy, FiEdit } from "react-icons/fi";
+import { FiSave, FiCopy, FiEdit, FiTrash2 } from "react-icons/fi";
 import { notifications } from "@mantine/notifications";
 import { useSnippetStore } from "@/store/snippet.store";
 import { useState } from "react";
@@ -29,12 +29,14 @@ export const Aside = () => {
     language,
     createSnippet,
     updateSnippet,
+    deleteSnippet,
     isLoading,
     currentSnippet,
   } = useSnippetStore();
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingFlavor, setPendingFlavor] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const isUpdating = currentSnippet && currentSnippet.uniqueId;
 
@@ -76,6 +78,27 @@ export const Aside = () => {
       notifications.show({
         title: "Error",
         message: "Failed to copy link",
+        color: "red",
+      });
+    }
+  };
+
+  const handleDeleteSnippet = async () => {
+    if (!currentSnippet?.uniqueId) return;
+
+    const result = await deleteSnippet(currentSnippet.uniqueId);
+
+    if (result.success) {
+      notifications.show({
+        title: "Success",
+        message: "Snippet deleted successfully!",
+        color: "green",
+      });
+      setShowDeleteModal(false);
+    } else {
+      notifications.show({
+        title: "Error",
+        message: result.error || "Failed to delete snippet",
         color: "red",
       });
     }
@@ -188,6 +211,16 @@ export const Aside = () => {
             Copy Link
           </Button>
 
+          <Button
+            variant="outline"
+            color="red"
+            leftSection={<FiTrash2 size={16} />}
+            onClick={() => setShowDeleteModal(true)}
+            disabled={isLoading}
+          >
+            Delete Snippet
+          </Button>
+
           <Stack gap={4}>
             <Text size="xs" fw={500} c="gray.6">
               Snippet Details
@@ -207,6 +240,32 @@ export const Aside = () => {
           </Stack>
         </Stack>
       )}
+
+      <Modal
+        opened={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="Delete Snippet"
+        centered
+      >
+        <Stack gap="md">
+          <Text>
+            Are you sure you want to delete "{currentSnippet?.name}"? This
+            action cannot be undone.
+          </Text>
+          <Group justify="flex-end">
+            <Button variant="outline" onClick={() => setShowDeleteModal(false)}>
+              Cancel
+            </Button>
+            <Button
+              color="red"
+              onClick={handleDeleteSnippet}
+              disabled={isLoading}
+            >
+              Delete Snippet
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
 
       <Modal
         opened={showConfirmModal}

@@ -5,6 +5,7 @@ import {
   getUserSnippetsService,
   getPublicSnippetsService,
   updateSnippetService,
+  deleteSnippetService,
 } from "@/api/snippet.api";
 
 export const useSnippetStore = create()(
@@ -80,6 +81,29 @@ export const useSnippetStore = create()(
             await get().fetchPublicSnippets();
             set({ currentSnippet: response.snippet, isLoading: false });
             return { success: true, snippet: response.snippet };
+          } else {
+            set({ error: response.message, isLoading: false });
+            return { success: false, error: response.message };
+          }
+        } catch (error) {
+          set({ error: error.message, isLoading: false });
+          return { success: false, error: error.message };
+        }
+      },
+
+      deleteSnippet: async (snippetId) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await deleteSnippetService(snippetId);
+          if (response.success) {
+            // Refresh user snippets after deleting
+            await get().fetchUserSnippets();
+            // Refresh public snippets in case a public snippet was deleted
+            await get().fetchPublicSnippets();
+            // Reset form and clear current snippet
+            get().resetForm();
+            set({ currentSnippet: null, isLoading: false });
+            return { success: true };
           } else {
             set({ error: response.message, isLoading: false });
             return { success: false, error: response.message };
