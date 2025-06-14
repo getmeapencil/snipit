@@ -84,7 +84,6 @@ export const Navbar = () => {
                       fullWidth
                       variant="subtle"
                       size="compact-lg"
-                      color="dark"
                       fw={400}
                       onClick={() => handleSnippetClick(snippet)}
                     >
@@ -119,7 +118,6 @@ export const Navbar = () => {
                   variant="subtle"
                   fw={400}
                   size="compact-lg"
-                  color="dark"
                   onClick={() => navigate(`/snippet/${snippet.uniqueId}`)}
                 >
                   <Text size="sm" truncate>

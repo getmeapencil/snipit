@@ -3,12 +3,16 @@ import { BrowserRouter } from "react-router-dom";
 import "@mantine/core/styles.css";
 import "@mantine/tiptap/styles.css";
 import "@mantine/notifications/styles.css";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, createTheme } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { AppRouter } from "./router";
 import { fetchCurrentUserService, refreshTokenService } from "./api/auth.api";
 import { useAuthStore } from "./store/auth.store";
 import { handleError } from "./lib/errorHandler";
+
+const theme = createTheme({
+  fontFamily: "Inter",
+});
 
 function App() {
   const { token, setToken, setLoading, setUser, logout } = useAuthStore();
@@ -57,11 +61,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <MantineProvider
-        theme={{
-          fontFamily: "Inter",
-        }}
-      >
+      <MantineProvider theme={theme} defaultColorScheme="auto">
         <Notifications />
         <AppRouter />
       </MantineProvider>

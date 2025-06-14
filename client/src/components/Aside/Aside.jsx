@@ -271,21 +271,19 @@ export const Aside = ({ isViewOnly = false, isAuthor = false }) => {
           )}
 
           <Stack gap={4}>
-            <Text size="xs" fw={500} c="gray.6">
+            <Text size="xs" fw={500}>
               Snippet Details
             </Text>
-            <Text size="xs" c="gray.7">
+            <Text size="xs">
               Created: {new Date(currentSnippet.createdAt).toLocaleString()}
             </Text>
             {currentSnippet.updatedAt &&
               currentSnippet.updatedAt !== currentSnippet.createdAt && (
-                <Text size="xs" c="gray.7">
+                <Text size="xs">
                   Updated: {new Date(currentSnippet.updatedAt).toLocaleString()}
                 </Text>
               )}
-            <Text size="xs" c="gray.7">
-              ID: {currentSnippet.uniqueId}
-            </Text>
+            <Text size="xs">ID: {currentSnippet.uniqueId}</Text>
           </Stack>
         </Stack>
       )}

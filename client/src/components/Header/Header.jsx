@@ -7,6 +7,7 @@ import {
   Menu,
   ActionIcon,
   TextInput,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
@@ -18,6 +19,8 @@ import {
   FiCheck,
   FiX,
   FiLogIn,
+  FiSun,
+  FiMoon,
 } from "react-icons/fi";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
@@ -29,6 +32,7 @@ export const Header = ({
   toggleAside,
 }) => {
   const navigate = useNavigate();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { isAuthenticated, user, logout, updateUsername, isLoading } =
     useAuthStore();
   const [isEditingUsername, setIsEditingUsername] = useState(false);
@@ -105,12 +109,21 @@ export const Header = ({
           </Text>
         </Flex>
       </Flex>
-      <Flex align="center" gap={8}>
+      <Flex align="center" gap="sm">
+        <ActionIcon
+          onClick={toggleColorScheme}
+          variant="subtle"
+          size={36}
+          aria-label="Toggle color scheme"
+        >
+          {colorScheme === "dark" ? <FiSun /> : <FiMoon />}
+        </ActionIcon>
         <Menu disabled={!isAuthenticated}>
           <Menu.Target>
             <Avatar
               variant="outline"
               radius="sm"
+              size={36}
               color="blue"
               src={user?.profilePicture}
               style={{ cursor: "pointer" }}
