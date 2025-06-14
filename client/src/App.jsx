@@ -33,8 +33,6 @@ function App() {
         return;
       }
 
-      console.log("Verifying user session...");
-
       try {
         const response = await fetchCurrentUserService();
         if (response.success && response.user) {

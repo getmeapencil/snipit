@@ -9,7 +9,7 @@ const LANGUAGE_OPTIONS = monaco.languages.getLanguages().map((language) => ({
   label: language.aliases?.[0] || language.id,
 }));
 
-export const CodeEditor = () => {
+export const CodeEditor = ({ isViewOnly = false }) => {
   const { content, setContent, language, setLanguage } = useSnippetStore();
   const editorRef = useRef(null);
 
@@ -29,7 +29,6 @@ export const CodeEditor = () => {
           onChange={setLanguage}
           searchable
         />
-
         <Button variant="outline" onClick={formatCode} size="sm">
           Format
         </Button>
@@ -39,7 +38,9 @@ export const CodeEditor = () => {
         width="100%"
         language={language}
         value={content}
-        onChange={(value) => setContent(value || "")}
+        onChange={(value) => {
+          !isViewOnly && setContent(value || "");
+        }}
         onMount={(editor) => {
           editorRef.current = editor;
         }}
@@ -50,7 +51,7 @@ export const CodeEditor = () => {
           lineNumbers: "on",
           roundedSelection: false,
           scrollBeyondLastLine: false,
-          readOnly: false,
+          readOnly: isViewOnly,
           automaticLayout: true,
           wordWrap: "on",
         }}

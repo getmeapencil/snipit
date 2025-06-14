@@ -3,24 +3,24 @@ import { PlainEditor } from "../PlainEditor/PlainEditor";
 import { CodeEditor } from "../CodeEditor/CodeEditor";
 import { RichTextEditor } from "../RichTextEditor/RichTextEditor";
 import { useSnippetStore } from "@/store/snippet.store";
-import { useAuthStore } from "@/store/auth.store";
 import styles from "./MainContent.module.css";
+import { useAuthStore } from "@/store/auth.store";
 
-export const MainContent = () => {
+export const MainContent = ({ isViewOnly = false }) => {
   const { flavor } = useSnippetStore();
 
   return (
     <div className={styles.mainContent}>
       <Title />
-      {flavor === "Plain" && <PlainEditor />}
-      {flavor === "Code" && <CodeEditor />}
-      {flavor === "Rich Text" && <RichTextEditor />}
+      {flavor === "Plain" && <PlainEditor isViewOnly={isViewOnly} />}
+      {flavor === "Code" && <CodeEditor isViewOnly={isViewOnly} />}
+      {flavor === "Rich Text" && <RichTextEditor isViewOnly={isViewOnly} />}
     </div>
   );
 };
 
 const Title = () => {
-  const { name } = useSnippetStore();
+  const { name, currentSnippet } = useSnippetStore();
   const { user } = useAuthStore();
   return (
     <div>
@@ -28,7 +28,7 @@ const Title = () => {
         {name}
       </Text>
       <Text c="gray.6" fw={400} ta="center" size="xs" mb="1rem">
-        by {user?.username}
+        by {currentSnippet?.author?.username || user?.username}
       </Text>
     </div>
   );

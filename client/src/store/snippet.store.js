@@ -6,6 +6,7 @@ import {
   getPublicSnippetsService,
   updateSnippetService,
   deleteSnippetService,
+  getSnippetService,
 } from "@/api/snippet.api";
 
 export const useSnippetStore = create()(
@@ -144,6 +145,40 @@ export const useSnippetStore = create()(
         } catch (error) {
           set({ error: error.message });
           return { success: false, error: error.message };
+        }
+      },
+
+      fetchSnippet: async (snippetId, password = null) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await getSnippetService(snippetId, password);
+          if (response.success && !response.requiresPassword) {
+            set({
+              isLoading: false,
+              name: response.snippet.name,
+              content: response.snippet.content,
+              flavor: response.snippet.flavor,
+              exposure: response.snippet.exposure,
+              language: response.snippet.language || "javascript",
+              currentSnippet: response.snippet,
+            });
+            return {
+              success: true,
+              snippet: response.snippet,
+              requiresPassword: response.requiresPassword,
+              isAuthor: response.isAuthor,
+            };
+          } else {
+            set({ error: response.message, isLoading: false });
+            return {
+              success: false,
+              error: response.message,
+              requiresPassword: response.requiresPassword,
+            };
+          }
+        } catch (error) {
+          set({ error: error.message, isLoading: false });
+          return { success: false, error: error.response.data.message };
         }
       },
 

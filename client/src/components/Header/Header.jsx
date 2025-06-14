@@ -7,12 +7,18 @@ import {
   Menu,
   ActionIcon,
   TextInput,
-  Button,
-  Notification,
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth.store";
-import { FiEdit, FiLogOut, FiMail, FiUser, FiCheck, FiX } from "react-icons/fi";
+import {
+  FiEdit,
+  FiLogOut,
+  FiMail,
+  FiUser,
+  FiCheck,
+  FiX,
+  FiLogIn,
+} from "react-icons/fi";
 import { useState } from "react";
 import { notifications } from "@mantine/notifications";
 
@@ -23,7 +29,8 @@ export const Header = ({
   toggleAside,
 }) => {
   const navigate = useNavigate();
-  const { user, logout, updateUsername, isLoading } = useAuthStore();
+  const { isAuthenticated, user, logout, updateUsername, isLoading } =
+    useAuthStore();
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [newUsername, setNewUsername] = useState(user?.username || "");
 
@@ -99,7 +106,7 @@ export const Header = ({
         </Flex>
       </Flex>
       <Flex align="center" gap={8}>
-        <Menu>
+        <Menu disabled={!isAuthenticated}>
           <Menu.Target>
             <Avatar
               variant="outline"
@@ -107,6 +114,11 @@ export const Header = ({
               color="blue"
               src={user?.profilePicture}
               style={{ cursor: "pointer" }}
+              onClick={() => {
+                if (!isAuthenticated) {
+                  navigate("/auth");
+                }
+              }}
             />
           </Menu.Target>
           <Menu.Dropdown>

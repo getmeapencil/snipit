@@ -4,8 +4,10 @@ import { FiSearch, FiPlus } from "react-icons/fi";
 import { useState } from "react";
 import { useSnippetStore } from "@/store/snippet.store";
 import { useAuthStore } from "@/store/auth.store";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const {
     userSnippets,
@@ -14,7 +16,7 @@ export const Navbar = () => {
     setCurrentSnippet,
     resetForm,
   } = useSnippetStore();
-  const { user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
 
   // Filter user snippets based on search term
   const filteredUserSnippets = userSnippets.filter((snippet) =>
@@ -22,6 +24,7 @@ export const Navbar = () => {
   );
 
   const handleSnippetClick = (snippet) => {
+    navigate("/");
     setCurrentSnippet(snippet);
   };
 
@@ -32,16 +35,27 @@ export const Navbar = () => {
 
   return (
     <Stack gap="md">
-      <Button
-        variant="outline"
-        leftSection={<FiPlus size={16} />}
-        onClick={handleCreateNew}
-        fullWidth
-      >
-        Create New Snippet
-      </Button>
+      {isAuthenticated ? (
+        <Button
+          variant="outline"
+          leftSection={<FiPlus size={16} />}
+          onClick={handleCreateNew}
+          fullWidth
+        >
+          Create New Snippet
+        </Button>
+      ) : (
+        <Button
+          variant="outline"
+          leftSection={<FiPlus size={16} />}
+          onClick={() => navigate("/auth")}
+          fullWidth
+        >
+          Login to create a snippet
+        </Button>
+      )}
 
-      {user && (
+      {isAuthenticated && (
         <Flex direction="column" gap={8}>
           <Text size="xs" fw={500} c="gray.6">
             Your Snippets ({userSnippets.length})
@@ -105,6 +119,7 @@ export const Navbar = () => {
                   fw={400}
                   size="compact-lg"
                   color="dark"
+                  onClick={() => navigate(`/snippet/${snippet.uniqueId}`)}
                 >
                   <Text size="sm" truncate>
                     {snippet.name}

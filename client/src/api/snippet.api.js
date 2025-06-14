@@ -1,5 +1,6 @@
 import apiClient from "@/api/apiClient";
 import { handleError } from "@/lib/errorHandler";
+import { useAuthStore } from "@/store/auth.store";
 
 export const createSnippetService = async (snippetData) => {
   try {
@@ -14,9 +15,13 @@ export const createSnippetService = async (snippetData) => {
 
 export const getSnippetService = async (snippetId, password = null) => {
   try {
-    const response = await apiClient.post(`/snippets/${snippetId}/view`, {
-      password,
-    });
+    const isAuthenticated = useAuthStore.getState().isAuthenticated;
+    const response = await apiClient.post(
+      `/snippets/${snippetId}/${isAuthenticated ? "view" : "public-view"}`,
+      {
+        password,
+      },
+    );
     return response.data;
   } catch (error) {
     return handleError(error, {

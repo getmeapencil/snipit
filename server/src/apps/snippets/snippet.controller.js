@@ -34,7 +34,7 @@ export const createSnippet = async (req, res) => {
     const snippet = new Snippet(snippetData);
 
     await snippet.save();
-    await snippet.populate("author", "username email");
+    await snippet.populate("author", "username");
 
     res.status(201).json({
       success: true,
@@ -59,7 +59,7 @@ export const getSnippet = async (req, res) => {
 
     const snippet = await Snippet.findOne({ uniqueId: id }).populate(
       "author",
-      "username email",
+      "username",
     );
 
     if (!snippet) {
@@ -70,7 +70,7 @@ export const getSnippet = async (req, res) => {
     }
 
     // Check access permissions
-    const isAuthor = req.user && req.user.id === snippet.author._id.toString();
+    const isAuthor = req.user?.id === snippet.author._id.toString();
 
     // Private snippets - only author can access
     if (snippet.exposure === "private" && !isAuthor) {
@@ -83,7 +83,7 @@ export const getSnippet = async (req, res) => {
     // Unlisted snippets with password
     if (snippet.exposure === "unlisted" && snippet.password && !isAuthor) {
       if (!password) {
-        return res.status(401).json({
+        return res.status(200).json({
           success: false,
           message: "Password required",
           requiresPassword: true,
@@ -160,7 +160,7 @@ export const updateSnippet = async (req, res) => {
     }
 
     await snippet.save();
-    await snippet.populate("author", "username email");
+    await snippet.populate("author", "username");
 
     res.json({
       success: true,
@@ -184,7 +184,7 @@ export const getUserSnippets = async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
 
     const snippets = await Snippet.find({ author: userId })
-      .populate("author", "username email")
+      .populate("author", "username")
       .sort({ createdAt: -1 })
       .limit(parseInt(limit))
       .skip((page - 1) * limit);
@@ -213,7 +213,7 @@ export const getPublicSnippets = async (req, res) => {
     const { limit = 5 } = req.query;
 
     const snippets = await Snippet.find({ exposure: "public" })
-      .populate("author", "username email")
+      .populate("author", "username")
       .sort({ createdAt: -1 })
       .limit(parseInt(limit));
 

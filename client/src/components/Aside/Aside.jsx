@@ -13,8 +13,9 @@ import { FiSave, FiCopy, FiEdit, FiTrash2 } from "react-icons/fi";
 import { notifications } from "@mantine/notifications";
 import { useSnippetStore } from "@/store/snippet.store";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const Aside = () => {
+export const Aside = ({ isViewOnly = false, isAuthor = false }) => {
   const {
     name,
     setName,
@@ -33,7 +34,7 @@ export const Aside = () => {
     isLoading,
     currentSnippet,
   } = useSnippetStore();
-
+  const navigate = useNavigate();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingFlavor, setPendingFlavor] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -154,55 +155,73 @@ export const Aside = () => {
 
   return (
     <Stack gap="md">
-      <TextInput
-        label="Name"
-        placeholder="Enter snippet name"
-        value={name}
-        onChange={(event) => setName(event.currentTarget.value)}
-      />
+      {!isViewOnly && (
+        <>
+          <TextInput
+            label="Name"
+            placeholder="Enter snippet name"
+            value={name}
+            onChange={(event) => setName(event.currentTarget.value)}
+          />
 
-      <Select
-        label="Flavor"
-        placeholder="Select flavor"
-        data={["Plain", "Code", "Rich Text"]}
-        value={flavor}
-        onChange={handleFlavorChange}
-        size="sm"
-        style={{ minWidth: 120 }}
-      />
+          <Select
+            label="Flavor"
+            placeholder="Select flavor"
+            data={["Plain", "Code", "Rich Text"]}
+            value={flavor}
+            onChange={handleFlavorChange}
+            size="sm"
+            style={{ minWidth: 120 }}
+          />
 
-      <Radio.Group label="Exposure" value={exposure} onChange={setExposure}>
-        <Stack mt="xs">
-          <Radio value="public" label="Public" />
-          <Radio value="unlisted" label="Unlisted" />
-          <Radio value="private" label="Private" />
-        </Stack>
-      </Radio.Group>
+          <Radio.Group label="Exposure" value={exposure} onChange={setExposure}>
+            <Stack mt="xs">
+              <Radio value="public" label="Public" />
+              <Radio value="unlisted" label="Unlisted" />
+              <Radio value="private" label="Private" />
+            </Stack>
+          </Radio.Group>
 
-      {exposure === "unlisted" && (
-        <PasswordInput
-          label="Password"
-          description={
-            isUpdating
-              ? "Leave empty to keep existing password or enter new password"
-              : "Leave empty for no password"
-          }
-          placeholder="Enter password"
-          value={password}
-          onChange={(event) => setPassword(event.currentTarget.value)}
-        />
+          {exposure === "unlisted" && (
+            <PasswordInput
+              label="Password"
+              description={
+                isUpdating
+                  ? "Leave empty to keep existing password or enter new password"
+                  : "Leave empty for no password"
+              }
+              placeholder="Enter password"
+              value={password}
+              onChange={(event) => setPassword(event.currentTarget.value)}
+            />
+          )}
+
+          <Button
+            leftSection={
+              isUpdating ? <FiEdit size={16} /> : <FiSave size={16} />
+            }
+            onClick={handleSaveSnippet}
+            disabled={isLoading}
+          >
+            {isUpdating ? "Update Snippet" : "Save Snippet"}
+          </Button>
+        </>
       )}
 
-      <Button
-        leftSection={isUpdating ? <FiEdit size={16} /> : <FiSave size={16} />}
-        onClick={handleSaveSnippet}
-        disabled={isLoading}
-      >
-        {isUpdating ? "Update Snippet" : "Save Snippet"}
-      </Button>
-
       {currentSnippet && (
-        <Stack gap="xs">
+        <Stack gap="md">
+          {isViewOnly && isAuthor && (
+            <Button
+              variant="outline"
+              leftSection={<FiEdit size={16} />}
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Edit Snippet
+            </Button>
+          )}
+
           <Button
             variant="outline"
             leftSection={<FiCopy size={16} />}
@@ -211,15 +230,17 @@ export const Aside = () => {
             Copy Link
           </Button>
 
-          <Button
-            variant="outline"
-            color="red"
-            leftSection={<FiTrash2 size={16} />}
-            onClick={() => setShowDeleteModal(true)}
-            disabled={isLoading}
-          >
-            Delete Snippet
-          </Button>
+          {!isViewOnly && (
+            <Button
+              variant="outline"
+              color="red"
+              leftSection={<FiTrash2 size={16} />}
+              onClick={() => setShowDeleteModal(true)}
+              disabled={isLoading}
+            >
+              Delete Snippet
+            </Button>
+          )}
 
           <Stack gap={4}>
             <Text size="xs" fw={500} c="gray.6">

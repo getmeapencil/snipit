@@ -4,13 +4,13 @@ import { useEffect } from "react";
 import { ScrollArea } from "@mantine/core";
 import { useAuthStore } from "@/store/auth.store";
 import { useSnippetStore } from "@/store/snippet.store";
-import { Header } from "./components/Header/Header";
-import { Navbar } from "./components/Navbar/Navbar";
-import { Aside } from "./components/Aside/Aside";
-import { MainContent } from "./components/MainContent/MainContent";
+import { Header } from "@/components/Header/Header";
+import { Navbar } from "@/components/Navbar/Navbar";
+import { Aside } from "@/components/Aside/Aside";
+import { MainContent } from "@/components/MainContent/MainContent";
 
 export const MainPage = () => {
-  const { user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const { fetchUserSnippets, fetchPublicSnippets } = useSnippetStore();
 
   const [navbarOpened, { toggle: toggleNavbar }] = useDisclosure();
@@ -18,11 +18,11 @@ export const MainPage = () => {
 
   // Fetch initial data
   useEffect(() => {
-    if (user) {
+    if (isAuthenticated) {
       fetchUserSnippets();
-      fetchPublicSnippets();
     }
-  }, [user, fetchUserSnippets, fetchPublicSnippets]);
+    fetchPublicSnippets();
+  }, [isAuthenticated, fetchUserSnippets, fetchPublicSnippets]);
 
   return (
     <AppShell
