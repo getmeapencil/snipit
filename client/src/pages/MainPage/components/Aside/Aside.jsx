@@ -6,10 +6,13 @@ import {
   PasswordInput,
   Button,
   Text,
+  Modal,
+  Group,
 } from "@mantine/core";
 import { FiSave, FiCopy, FiEdit } from "react-icons/fi";
 import { notifications } from "@mantine/notifications";
 import { useSnippetStore } from "@/store/snippet.store";
+import { useState } from "react";
 
 export const Aside = () => {
   const {
@@ -22,6 +25,7 @@ export const Aside = () => {
     password,
     setPassword,
     content,
+    setContent,
     language,
     createSnippet,
     updateSnippet,
@@ -29,7 +33,31 @@ export const Aside = () => {
     currentSnippet,
   } = useSnippetStore();
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingFlavor, setPendingFlavor] = useState(null);
+
   const isUpdating = currentSnippet && currentSnippet.uniqueId;
+
+  const handleFlavorChange = (newFlavor) => {
+    if (content.trim() && newFlavor !== flavor) {
+      setPendingFlavor(newFlavor);
+      setShowConfirmModal(true);
+    } else {
+      setFlavor(newFlavor);
+    }
+  };
+
+  const handleConfirmFlavorChange = () => {
+    setContent("");
+    setFlavor(pendingFlavor);
+    setShowConfirmModal(false);
+    setPendingFlavor(null);
+  };
+
+  const handleCancelFlavorChange = () => {
+    setShowConfirmModal(false);
+    setPendingFlavor(null);
+  };
 
   const handleCopyLink = async () => {
     if (!currentSnippet?.uniqueId) return;
@@ -115,7 +143,7 @@ export const Aside = () => {
         placeholder="Select flavor"
         data={["Plain", "Code", "Rich Text"]}
         value={flavor}
-        onChange={setFlavor}
+        onChange={handleFlavorChange}
         size="sm"
         style={{ minWidth: 120 }}
       />
@@ -179,6 +207,28 @@ export const Aside = () => {
           </Stack>
         </Stack>
       )}
+
+      <Modal
+        opened={showConfirmModal}
+        onClose={handleCancelFlavorChange}
+        title="Confirm Flavor Change"
+        centered
+      >
+        <Stack gap="md">
+          <Text>
+            Changing the flavor will clear the current content. Do you want to
+            continue?
+          </Text>
+          <Group justify="flex-end">
+            <Button variant="outline" onClick={handleCancelFlavorChange}>
+              Cancel
+            </Button>
+            <Button color="red" onClick={handleConfirmFlavorChange}>
+              Clear Content & Change Flavor
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
     </Stack>
   );
 };
