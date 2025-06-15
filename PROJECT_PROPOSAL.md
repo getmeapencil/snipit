@@ -1,8 +1,10 @@
-### 1. Title of the Project
+# Synopsis
+
+## 1. Title of the Project
 
 **Snipit: A Secure and Shareable Snippet Management System**
 
-### 2. Introduction and Objectives
+## 2. Introduction and Objectives
 
 In the digital age, the ability to quickly capture, manage, and share information is paramount for productivity and collaboration. Developers, writers, students, and professionals constantly work with fragments of information—code snippets, notes, commands, links, and temporary text. Existing tools like traditional note-taking apps can be too cumbersome for managing these small, ephemeral pieces of content, while simple text editors lack features for sharing and organization. This creates a gap for a specialized tool designed for efficient snippet management.
 
@@ -21,7 +23,7 @@ The core of the project revolves around flexible sharing and access control. Use
 
 Real-world applications for Snipit are numerous. A developer can use it to store and share reusable code fragments with their team, including specific programming language syntax highlighting. A technical support agent can use it to quickly share command-line instructions with a customer. An educator can create and share notes or formatted content with students using rich text capabilities. In essence, Snipit can serve as a centralized hub for any user who needs to manage and share small blocks of information efficiently.
 
-### 3. Project Category
+## 3. Project Category
 
 **Category:** Web Application / NoSQL Database System
 
@@ -31,9 +33,9 @@ This project falls primarily into the **Web Application** category, as its core 
 
 It also has a strong **NoSQL Database** component. The system's functionality relies heavily on a MongoDB database to store and manage data for users and snippets with their associated properties (like exposure, passwords, flavors, and relationships). The flexible schema nature of MongoDB is well-suited for the varying structure of different snippet types and the evolving nature of the application. The use of Mongoose ODM provides structured data modeling and validation while maintaining NoSQL flexibility.
 
-### 4. Analysis
+## 4. Analysis
 
-#### Data Flow Diagrams (DFD)
+### Data Flow Diagrams (DFD)
 
 Here are the Level 0 and Level 1 DFDs representing the flow of data within the Snipit system.
 
@@ -85,7 +87,7 @@ Viewing --> User : Display Snippet\n(with password check if required)
 @enduml
 ```
 
-#### Class Diagram
+### Class Diagram
 
 This class diagram illustrates the main entities of the system and their relationships.
 
@@ -143,7 +145,7 @@ Snippet --> ExposureType
 @enduml
 ```
 
-#### Database Schema and Design
+### Database Schema and Design
 
 The database is designed using MongoDB with Mongoose ODM, featuring two primary collections: `User` and `Snippet`.
 
@@ -176,9 +178,9 @@ The database is designed using MongoDB with Mongoose ODM, featuring two primary 
 - The `author` field in the `Snippet` collection is indexed for fast lookups.
 - Additional indexes exist on `exposure` and `createdAt` for efficient querying of public snippets.
 
-### 5. Project Structure
+## 5. Project Structure
 
-#### Modules
+### Modules
 
 1.  **Authentication Module (Google OAuth + JWT)**:
 
@@ -201,7 +203,7 @@ The database is designed using MongoDB with Mongoose ODM, featuring two primary 
     - **Description**: Modern React application built with Vite for fast development and building. Uses Mantine UI component library for consistent, accessible interface components. Includes features like Monaco Editor for code editing, TipTap for rich text editing, and Zustand for state management.
     - **Core Components**: Authentication page, Main dashboard, Snippet creation/editing forms, Public snippet viewer, Loading states, and error handling.
 
-#### Pseudocode for Core Functions
+### Pseudocode for Core Functions
 
 **Create Snippet Logic (`/api/snippets` - POST)**
 
@@ -267,7 +269,7 @@ FUNCTION handleViewSnippet(uniqueId, request):
   RETURN 200 { snippet: snippet, isAuthor: isAuthor }
 ```
 
-#### Testing Strategies
+### Testing Strategies
 
 - **Unit Testing**: Use Jest or Vitest for testing individual functions and components.
   - Test API controllers with mock requests/responses and database operations.
@@ -278,7 +280,7 @@ FUNCTION handleViewSnippet(uniqueId, request):
   - Test authentication flow with Google OAuth mock and JWT handling.
   - Test snippet CRUD operations with temporary test database.
 
-### 6. Tools, Platform, Hardware/Software Requirements
+## 6. Tools, Platform, Hardware/Software Requirements
 
 - **Languages**: JavaScript, HTML, CSS
 - **Frontend Framework/Libraries**:
@@ -298,7 +300,7 @@ FUNCTION handleViewSnippet(uniqueId, request):
   - **CORS**: cors middleware for cross-origin requests
 - **Database**: MongoDB with Mongoose 8.15.0 ODM
 - **Platform/OS**:
-  - **Development**: Any modern OS (Windows, macOS, Linux)
+  - **Development**: Any modern OS (Windows, macsOS, Linux)
   - **Deployment**: Cloud platforms supporting Node.js (e.g., Railway, Render, AWS, DigitalOcean)
 - **Software Requirements**:
   - Node.js (v18 or later)
@@ -310,11 +312,11 @@ FUNCTION handleViewSnippet(uniqueId, request):
   - **Development**: Standard developer machine (8GB RAM, 2-core CPU, 256GB SSD)
   - **Server (Deployment)**: Scalable cloud instance (starts with 1 vCPU, 1GB RAM, can scale based on usage)
 
-### 7. Industry/Client Association
+## 7. Industry/Client Association
 
 This is an **academic project**. It is conceived and developed as a part of academic coursework and to build a portfolio. It is not associated with any external client or commercial organization. The primary goal is educational and to demonstrate proficiency in full-stack web development using modern technologies and industry-standard practices.
 
-### 8. Future Scope and Enhancements
+## 8. Future Scope and Enhancements
 
 - **Collaboration Features**: Allow multiple users to co-edit a snippet in real-time, similar to Google Docs, using WebSocket technology.
 - **Snippet Organization**: Introduce folders, tags, or categories to help users organize their snippets more effectively with search and filtering capabilities.
