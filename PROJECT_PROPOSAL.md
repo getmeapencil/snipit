@@ -39,33 +39,63 @@ Here are the Level 0 and Level 1 DFDs representing the flow of data within the S
 
 **Level 0 DFD (Context Diagram)**
 
-```
-User → Snipit System: Google OAuth Login, Manage Snippets (Create, Read, Update, Delete), View Snippets
-Snipit System → User: JWT Token, Snippet Data, Shareable Links
+```plantuml
+@startuml Level0_DFD
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+
+actor User
+rectangle "Snipit System" as System
+
+User --> System : Google OAuth Login,\nManage Snippets (Create, Read, Update, Delete),\nView Snippets
+System --> User : JWT Token,\nSnippet Data,\nShareable Links
+
+@enduml
 ```
 
 **Level 1 DFD**
 
-```
-User → 1.0 Google OAuth Authentication: Google Credentials
-1.0 Google OAuth Authentication → User: JWT Token
-1.0 Google OAuth Authentication ↔ Users DB: Store/Verify User Data
+```plantuml
+@startuml Level1_DFD
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName Arial
 
-User → 2.0 Snippet Management: Create/Update Snippet Data (flavor, exposure, password)
-2.0 Snippet Management → Snippets DB: Store/Update Snippet with uniqueId
-2.0 Snippet Management → User: Confirmation, Shareable Link
+actor User
+circle "1.0\nGoogle OAuth\nAuthentication" as Auth
+circle "2.0\nSnippet\nManagement" as Management
+circle "3.0\nSnippet\nViewing" as Viewing
+database "Users DB" as UsersDB
+database "Snippets DB" as SnippetsDB
 
-User → 3.0 Snippet Viewing: Request to View Snippet (via uniqueId)
-3.0 Snippet Viewing → Snippets DB: Fetch Snippet by uniqueId
-Snippets DB → 3.0 Snippet Viewing: Snippet Data
-3.0 Snippet Viewing → User: Display Snippet (with password check if required)
+User --> Auth : Google Credentials
+Auth --> User : JWT Token
+Auth <--> UsersDB : Store/Verify User Data
+
+User --> Management : Create/Update Snippet Data\n(flavor, exposure, password)
+Management --> SnippetsDB : Store/Update Snippet\nwith uniqueId
+Management --> User : Confirmation,\nShareable Link
+
+User --> Viewing : Request to View Snippet\n(via uniqueId)
+Viewing --> SnippetsDB : Fetch Snippet by uniqueId
+SnippetsDB --> Viewing : Snippet Data
+Viewing --> User : Display Snippet\n(with password check if required)
+
+@enduml
 ```
 
 #### Class Diagram
 
 This class diagram illustrates the main entities of the system and their relationships.
 
-```
+```plantuml
+@startuml ClassDiagram
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam classAttributeIconSize 0
+
 class User {
   +_id: ObjectId
   +googleId: String
@@ -95,20 +125,22 @@ class Snippet {
 }
 
 enum SnippetFlavor {
-  "Plain"
-  "Code"
+  Plain
+  Code
   "Rich Text"
 }
 
 enum ExposureType {
-  "public"
-  "private"
-  "unlisted"
+  public
+  private
+  unlisted
 }
 
-User "1" -- "0..*" Snippet : "creates"
-Snippet --|> SnippetFlavor
-Snippet --|> ExposureType
+User ||--o{ Snippet : "creates"
+Snippet --> SnippetFlavor
+Snippet --> ExposureType
+
+@enduml
 ```
 
 #### Database Schema and Design
