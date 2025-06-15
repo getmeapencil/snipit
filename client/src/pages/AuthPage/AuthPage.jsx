@@ -37,14 +37,14 @@ export const AuthPage = () => {
           {/* Hero Section */}
           <Stack gap="md" align="center">
             <Group>
-              <img
+              {/* <img
                 src="/logo-transparent.png"
                 alt="SnipIt"
                 style={{
                   height: "60px",
                   width: "auto",
                 }}
-              />
+              /> */}
               <Title
                 order={1}
                 size="3.5rem"

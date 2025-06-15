@@ -1,6 +1,5 @@
 import {
   Burger,
-  Image,
   Text,
   Flex,
   Avatar,
@@ -18,7 +17,6 @@ import {
   FiUser,
   FiCheck,
   FiX,
-  FiLogIn,
   FiSun,
   FiMoon,
 } from "react-icons/fi";
@@ -103,7 +101,7 @@ export const Header = ({
           style={{ cursor: "pointer" }}
           onClick={() => navigate("/")}
         >
-          <Image src="/logo-transparent.png" alt="logo" w={30} h={30} />
+          {/* <Image src="/logo-transparent.png" alt="logo" w={30} h={30} /> */}
           <Text size="1.5rem" fw={400}>
             SnipIt
           </Text>
