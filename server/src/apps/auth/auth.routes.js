@@ -25,7 +25,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: `${globalConfig.clientUrl}/auth/callback?error=Google_Authentication_Failed`, // Redirect on failure
-    session: false, // Ensure session is used by Passport
+    session: false, // Ensure session is not used by Passport
   }),
   handleGoogleCallback, // Controller to handle successful auth
 );
