@@ -10,6 +10,15 @@ Snipit is a full-stack web application for creating, storing, and sharing code s
 - Code editor with syntax highlighting for numerous languages
 - Shareable links for snippets
 
+## Showcase
+
+<img width="1863" height="1012" alt="image" src="https://github.com/user-attachments/assets/0834830e-5c75-438e-8768-ce25b03a4d27" />
+<img width="1863" height="1012" alt="image" src="https://github.com/user-attachments/assets/e7b77098-8496-4f58-9bb0-e87b51e3eb90" />
+<img width="1863" height="1012" alt="image" src="https://github.com/user-attachments/assets/9a47e088-b03d-40b8-966a-cc0531407af8" />
+<img width="1863" height="1012" alt="image" src="https://github.com/user-attachments/assets/595969fc-9f54-40d8-be13-94b9b749da8a" />
+<img width="1863" height="1012" alt="image" src="https://github.com/user-attachments/assets/e7be4aac-0c0b-4869-8f8c-17661036dac3" />
+
+
 ## Tech Stack
 
 **Client:** React, Vite, Mantine, Zustand, Monaco Editor, TipTap Rich Text Editor
